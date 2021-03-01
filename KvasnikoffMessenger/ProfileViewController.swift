@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private let profilePhoto: UIImageView = {
         let image = UIImage()
@@ -121,9 +121,75 @@ class ProfileViewController: UIViewController {
                                         
         ])
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(editButtonTapped))
+        editButton.addGestureRecognizer(tapGestureRecognizer)
 
         
     }
+    
+    @objc private func editButtonTapped() {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "Take Photo", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) -> Void in
+                self.camera()
+            }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Choose from Library", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) -> Void in
+                self.photoLibrary()
+            }))
+
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+        
+        actionSheet.pruneNegativeWidthConstraints() // устраняем ошибку Apple с констрейнтой в AlertViewController
+        
+
+        self.present(actionSheet, animated: true, completion: nil)
+        
+        
+    }
+    
+    private func camera()
+    {
+        let myPickerController = UIImagePickerController()
+        myPickerController.delegate = self;
+        
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            print("No camera found")
+            return
+            
+        }
+        
+        myPickerController.sourceType = .camera
+        self.present(myPickerController, animated: true, completion: nil)
+
+    }
+
+    private func photoLibrary()
+    {
+
+        let myPickerController = UIImagePickerController()
+        myPickerController.delegate = self;
+        myPickerController.sourceType = .photoLibrary
+
+        self.present(myPickerController, animated: true, completion: nil)
+
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        guard let selectedImage = info[.originalImage] as? UIImage else {
+            print("No image found")
+            return
+        }
+        
+        profilePhoto.image = selectedImage
+        initialsPhotoLabel.isHidden = true
+        
+        dismiss(animated: true)
+        
+    }
+    
+        
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -158,3 +224,13 @@ class ProfileViewController: UIViewController {
 
 }
 
+
+extension UIAlertController {
+    func pruneNegativeWidthConstraints() {
+        for subView in self.view.subviews {
+            for constraint in subView.constraints where constraint.debugDescription.contains("width == - 16") {
+                subView.removeConstraint(constraint)
+            }
+        }
+    }
+}
