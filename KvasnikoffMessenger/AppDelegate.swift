@@ -19,6 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         printLog(log: "Application moved from Not Running State to \(parseState(state: application.applicationState)): \(#function)")
         previousApplicationState = application.applicationState
         // Override point for customization after application launch.
+        
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = ProfileViewController()
+        window.makeKeyAndVisible()
+        self.window = window
         return true
     }
 
