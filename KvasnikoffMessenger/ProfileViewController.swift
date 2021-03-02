@@ -13,6 +13,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let image = UIImage()
         let imageView = UIImageView(image: image)
         imageView.backgroundColor = UIColor(red: 228/255.0, green: 230/255.0, blue: 66/255.0, alpha: 1)
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
