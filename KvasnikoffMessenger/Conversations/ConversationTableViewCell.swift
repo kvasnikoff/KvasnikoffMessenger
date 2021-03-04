@@ -19,7 +19,7 @@ protocol conversationCellConfiguration {
 
 class ConversationTableViewCell: UITableViewCell {
     
-    struct conversationCellModel: conversationCellConfiguration {
+    struct ConversationCellModel: conversationCellConfiguration {
         var name: String?
         var message: String?
         var date: Date?
@@ -97,7 +97,7 @@ class ConversationTableViewCell: UITableViewCell {
         accessoryType = .disclosureIndicator
     }
     
-    func stringFromDate(date: Date) -> String {
+    private func stringFromDate(date: Date) -> String {
         let calendar = Calendar.current
         let dateFormatter = DateFormatter()
         var dateString = ""
@@ -116,8 +116,7 @@ class ConversationTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-
-    func configure(with model: conversationCellModel) {
+    func configure(with model: ConversationCellModel) {
         nameLabel.text = model.name ?? "Unknown Name (Nil)"
         
         if let date = model.date {

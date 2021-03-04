@@ -16,11 +16,11 @@ class ConversationsListViewController: UIViewController {
         var online: Bool
         var hasUnreadMessages: Bool
     }
-    var conversationsArray: [ConversationModel] = [ConversationModel(name: "Oleg Tinkoff", message: "А давайте мы купим этот говнояндекс", date: Date(), online: true, hasUnreadMessages: false), ConversationModel(name: "Оливер Хьюз", message: "Олег Тиньков – наш духовный отец, но банком руковожу я", date: Date(), online: true, hasUnreadMessages: true), ConversationModel(name: "Павел Дуров", message: "Только что попробовал iPhone 12 Pro — какой невероятно корявый кусок железа", date: Date(), online: true, hasUnreadMessages: false), ConversationModel(name: "Аркадий Волож", message: nil, date: nil, online: true, hasUnreadMessages: false), ConversationModel(name: "Очень длинный лейбл Очень Очень Очень", message: "И все же я не смещаю timeLabel :)", date: Date(), online: true, hasUnreadMessages: false), ConversationModel(name: nil, message: "Это очень длинное сообщение очень очень длинное очень очень длинное очень очень очень очень", date: Date(), online: true, hasUnreadMessages: true), ConversationModel(name: "Дата не сегодняшняя", message: "И это не страшно", date: Date(timeIntervalSinceNow: -172800.0), online: true, hasUnreadMessages: false), ConversationModel(name: "Сундар Пичаи", message: nil, date: nil, online: true, hasUnreadMessages: false), ConversationModel(name: "Без сообщения и сл-но даты", message: nil, date: nil, online: true, hasUnreadMessages: false), ConversationModel(name: "Craig Federighi", message: "How cool is that?", date: Date(timeIntervalSinceNow: -182800.0), online: true, hasUnreadMessages: true), ConversationModel(name: nil, message: nil, date: nil, online: false, hasUnreadMessages: false), ConversationModel(name: "Сегодняшнее", message: "Время", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Проверил", message: "С nil сообщением сюда не пропускают", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Дата", message: "Вчерашняя", date: Date(timeIntervalSinceNow: -86400), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true), ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true), ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true), ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true)]
+    private var conversationsArray: [ConversationModel] = [ConversationModel(name: "Oleg Tinkoff", message: "А давайте мы купим этот говнояндекс", date: Date(), online: true, hasUnreadMessages: false), ConversationModel(name: "Оливер Хьюз", message: "Олег Тиньков – наш духовный отец, но банком руковожу я", date: Date(), online: true, hasUnreadMessages: true), ConversationModel(name: "Павел Дуров", message: "Только что попробовал iPhone 12 Pro — какой невероятно корявый кусок железа", date: Date(), online: true, hasUnreadMessages: false), ConversationModel(name: "Аркадий Волож", message: nil, date: nil, online: true, hasUnreadMessages: false), ConversationModel(name: "Очень длинный лейбл Очень Очень Очень", message: "И все же я не смещаю timeLabel :)", date: Date(), online: true, hasUnreadMessages: false), ConversationModel(name: nil, message: "Это очень длинное сообщение очень очень длинное очень очень длинное очень очень очень очень", date: Date(), online: true, hasUnreadMessages: true), ConversationModel(name: "Дата не сегодняшняя", message: "И это не страшно", date: Date(timeIntervalSinceNow: -172800.0), online: true, hasUnreadMessages: false), ConversationModel(name: "Сундар Пичаи", message: nil, date: nil, online: true, hasUnreadMessages: false), ConversationModel(name: "Без сообщения и сл-но даты", message: nil, date: nil, online: true, hasUnreadMessages: false), ConversationModel(name: "Craig Federighi", message: "How cool is that?", date: Date(timeIntervalSinceNow: -182800.0), online: true, hasUnreadMessages: true), ConversationModel(name: nil, message: nil, date: nil, online: false, hasUnreadMessages: false), ConversationModel(name: "Сегодняшнее", message: "Время", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Проверил", message: "С nil сообщением сюда не пропускают", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Дата", message: "Вчерашняя", date: Date(timeIntervalSinceNow: -86400), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true), ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true), ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true), ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false), ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true)]
     
-    var onlineNowArray: [ConversationModel] = []
+    private var onlineNowArray: [ConversationModel] = []
     
-    var notEmptAndNotOnlineConversationArray: [ConversationModel] = []
+    private var notEmptAndNotOnlineConversationArray: [ConversationModel] = []
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .plain)
@@ -37,7 +37,7 @@ class ConversationsListViewController: UIViewController {
         setupUI()
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -53,21 +53,21 @@ class ConversationsListViewController: UIViewController {
         ])
     }
     
-    func setupNavigationBar() {
+    private func setupNavigationBar() {
         title = "Tinkoff Chat"
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle.fill"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
     }
     
-    @objc func rightBarButtonTapped () {
+    @objc private func rightBarButtonTapped () {
         present(ProfileViewController(), animated: true, completion: nil)
     }
    
-    func setupUI() {
+    private func setupUI() {
         self.view.backgroundColor = .white
     }
     
-    func onlineNow () {
+    private func onlineNow () {
         for conversation in conversationsArray {
             if conversation.online == true { onlineNowArray.append(conversation) }
             else if conversation.message != nil { notEmptAndNotOnlineConversationArray.append(conversation) }
@@ -116,7 +116,21 @@ extension ConversationsListViewController: UITableViewDelegate, UITableViewDataS
         tableView.rowHeight = cell.contentView.bounds.size.width / 3.5
         
         return cell
+    }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var array = [ConversationModel]()
+        
+        if indexPath.section == 0 {
+            array = onlineNowArray
+        } else {
+            array = notEmptAndNotOnlineConversationArray
+        }
+        
+        let name = array[indexPath.row].name ?? "Unknown Name (Nil)"
+        navigationController?.pushViewController(MessagesViewController(chatTitle: name), animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+
     }
     
     
