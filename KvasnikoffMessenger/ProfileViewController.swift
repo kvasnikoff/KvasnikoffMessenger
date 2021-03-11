@@ -7,30 +7,20 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private let profilePhoto: UIImageView = {
         let image = UIImage()
         let imageView = UIImageView(image: image)
         imageView.backgroundColor = UIColor(red: 228/255.0, green: 230/255.0, blue: 66/255.0, alpha: 1)
-//        imageView.layer.masksToBounds = true
-        
-      //  thumbsup.image = thumbsup.image?.withRenderingMode(.alwaysTemplate)
-     //   thumbsup.tintColor = UIColor.gray
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
-    private let firstLetterLabel: UILabel = {
+    private let initialsPhotoLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .natural
-        label.text = "M"
-        return label
-    }()
-    
-    private let secondLetterLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .natural
-        label.text = "D"
+        label.text = "MD"
         return label
     }()
     
@@ -59,25 +49,24 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
-
-    //я не знаю что делать, если я имплементирую, то в appdelegate когда я настраиваю вьюконтроллер, он просит у меня coder если я вставляю coder: NSCoder(), то случается краш. А уже почти 03:00 :)))
+    init() {
+        print("Init before super.init: \(editButton.frame)") //nil нету, все ок
+        super.init(nibName: nil, bundle: nil)
+        print("Init after super.init: \(editButton.frame)") //nil нету, все ок
+        
+    }
     
- //   print(editButton.frame) /// но вообще по идее если бы я решил проблему, то так как фрейма пока нет, получим nil при принте
-    
-    
-    // На этом этапе еще нет ни самой view, ни его аутлетов, поэтому приложение крашнется
-//    required init?(coder: NSCoder) {
-//        super.init(coder: coder)
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    required init?(coder: NSCoder) {
+        print("Required Init: \(editButton.frame)") //не вызывается
+        fatalError("init(coder:) has not been implemented")
+    }
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         printLog(log: "\(#function)")
-        print(editButton.frame)
+        print("viewDidLoad before SetupUI: \(editButton.frame)") //размеры не рассчитались
         setupUI()
-        // Do any additional setup after loading the view.
     }
     
     private func setupUI() {
@@ -90,8 +79,7 @@ class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(editButton)
-        view.addSubview(firstLetterLabel)
-        view.addSubview(secondLetterLabel)
+        view.addSubview(initialsPhotoLabel)
         
         profilePhoto.frame = CGRect(x: 0, y: 0, width: screenWidth/2.3, height: screenWidth/2.3)
         profilePhoto.layer.cornerRadius = (profilePhoto.frame.size.width) / 2 // circle
@@ -101,12 +89,10 @@ class ProfileViewController: UIViewController {
         
         descriptionLabel.font = .systemFont(ofSize: screenWidth/20)
         
-        firstLetterLabel.font = UIFont.boldSystemFont(ofSize: screenWidth/5)
-        secondLetterLabel.font = UIFont.boldSystemFont(ofSize: screenWidth/5)
+        initialsPhotoLabel.font = UIFont.boldSystemFont(ofSize: screenWidth/5)
         
         profilePhoto.translatesAutoresizingMaskIntoConstraints = false
-        firstLetterLabel.translatesAutoresizingMaskIntoConstraints = false
-        secondLetterLabel.translatesAutoresizingMaskIntoConstraints = false
+        initialsPhotoLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         editButton.translatesAutoresizingMaskIntoConstraints = false
@@ -129,20 +115,82 @@ class ProfileViewController: UIViewController {
             editButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: screenWidth/1.5),
             
-            firstLetterLabel.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor),
-            firstLetterLabel.trailingAnchor.constraint(equalTo: profilePhoto.centerXAnchor, constant: 8), //вообще лучше constant убрать, но я попытался сделать как в примере, чтобы они сливались
-            
-            secondLetterLabel.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor),
-            secondLetterLabel.leadingAnchor.constraint(equalTo: profilePhoto.centerXAnchor, constant: -8), //вообще лучше constant убрать, но я попытался сделать как в примере, чтобы они сливались
-            
+            initialsPhotoLabel.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor),
+            initialsPhotoLabel.centerXAnchor.constraint(equalTo: profilePhoto.centerXAnchor),
             
 
                                         
         ])
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(editButtonTapped))
+        editButton.addGestureRecognizer(tapGestureRecognizer)
 
         
     }
+    
+    @objc private func editButtonTapped() {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "Take Photo", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) -> Void in
+                self.camera()
+            }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Choose from Library", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) -> Void in
+                self.photoLibrary()
+            }))
+
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+        
+        actionSheet.pruneNegativeWidthConstraints() // устраняем ошибку Apple с констрейнтой в AlertViewController
+        
+
+        self.present(actionSheet, animated: true, completion: nil)
+        
+        
+    }
+    
+    private func camera()
+    {
+        let myPickerController = UIImagePickerController()
+        myPickerController.delegate = self;
+        
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            print("No camera found")
+            return
+            
+        }
+        
+        myPickerController.sourceType = .camera
+        self.present(myPickerController, animated: true, completion: nil)
+
+    }
+
+    private func photoLibrary()
+    {
+
+        let myPickerController = UIImagePickerController()
+        myPickerController.delegate = self;
+        myPickerController.sourceType = .photoLibrary
+
+        self.present(myPickerController, animated: true, completion: nil)
+
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        guard let selectedImage = info[.originalImage] as? UIImage else {
+            print("No image found")
+            return
+        }
+        
+        profilePhoto.image = selectedImage
+        initialsPhotoLabel.isHidden = true
+        
+        dismiss(animated: true)
+        
+    }
+    
+        
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -151,7 +199,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print(editButton.frame) //геометрия во viewDidLoad еще не установлена, поэтому отличается
+        print("viewVillAppear: \(editButton.frame)") // до этого во ViewDidLoad все расчитали, поэтому теперь все правильно выводится
     }
     
     override func viewWillLayoutSubviews() {
@@ -177,3 +225,13 @@ class ProfileViewController: UIViewController {
 
 }
 
+
+extension UIAlertController {
+    func pruneNegativeWidthConstraints() {
+        for subView in self.view.subviews {
+            for constraint in subView.constraints where constraint.debugDescription.contains("width == - 16") {
+                subView.removeConstraint(constraint)
+            }
+        }
+    }
+}
