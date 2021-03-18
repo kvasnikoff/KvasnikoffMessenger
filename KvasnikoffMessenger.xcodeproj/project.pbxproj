@@ -11,6 +11,8 @@
 		DF02C24125DC569300FB85B6 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF02C24025DC569300FB85B6 /* ProfileViewController.swift */; };
 		DF02C24625DC569600FB85B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF02C24525DC569600FB85B6 /* Assets.xcassets */; };
 		DF02C24925DC569600FB85B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF02C24725DC569600FB85B6 /* LaunchScreen.storyboard */; };
+		DF11D32B2604057300B3C78E /* GCDDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF11D32A2604057300B3C78E /* GCDDataManager.swift */; };
+		DF11D32E260405B600B3C78E /* OperationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF11D32D260405B600B3C78E /* OperationDataManager.swift */; };
 		DF3CB7D725F17ECF0062501B /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CB7D625F17ECF0062501B /* MessageTableViewCell.swift */; };
 		DF3CB7DA25F17EE90062501B /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CB7D925F17EE90062501B /* MessagesViewController.swift */; };
 		DF616F2D25DC71C400250526 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF616F2C25DC71C400250526 /* Logger.swift */; };
@@ -25,6 +27,8 @@
 		DF02C24525DC569600FB85B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF02C24825DC569600FB85B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF02C24A25DC569600FB85B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF11D32A2604057300B3C78E /* GCDDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDDataManager.swift; sourceTree = "<group>"; };
+		DF11D32D260405B600B3C78E /* OperationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationDataManager.swift; sourceTree = "<group>"; };
 		DF3CB7D625F17ECF0062501B /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		DF3CB7D925F17EE90062501B /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		DF616F2C25DC71C400250526 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -62,16 +66,26 @@
 		DF02C23B25DC569300FB85B6 /* KvasnikoffMessenger */ = {
 			isa = PBXGroup;
 			children = (
+				DF02C24025DC569300FB85B6 /* ProfileViewController.swift */,
 				DFDA324E25EFA5F000A80A73 /* Messages */,
 				DFDA324D25EFA5AD00A80A73 /* Conversations */,
-				DF02C23C25DC569300FB85B6 /* AppDelegate.swift */,
+				DF11D3292604052900B3C78E /* Data Management */,
 				DF616F2C25DC71C400250526 /* Logger.swift */,
-				DF02C24025DC569300FB85B6 /* ProfileViewController.swift */,
+				DF02C23C25DC569300FB85B6 /* AppDelegate.swift */,
 				DF02C24525DC569600FB85B6 /* Assets.xcassets */,
 				DF02C24725DC569600FB85B6 /* LaunchScreen.storyboard */,
 				DF02C24A25DC569600FB85B6 /* Info.plist */,
 			);
 			path = KvasnikoffMessenger;
+			sourceTree = "<group>";
+		};
+		DF11D3292604052900B3C78E /* Data Management */ = {
+			isa = PBXGroup;
+			children = (
+				DF11D32A2604057300B3C78E /* GCDDataManager.swift */,
+				DF11D32D260405B600B3C78E /* OperationDataManager.swift */,
+			);
+			path = "Data Management";
 			sourceTree = "<group>";
 		};
 		DFDA324D25EFA5AD00A80A73 /* Conversations */ = {
@@ -162,10 +176,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF02C24125DC569300FB85B6 /* ProfileViewController.swift in Sources */,
+				DF11D32E260405B600B3C78E /* OperationDataManager.swift in Sources */,
 				DF3CB7DA25F17EE90062501B /* MessagesViewController.swift in Sources */,
 				DFDA324725EF958B00A80A73 /* ConversationsListViewController.swift in Sources */,
 				DF616F2D25DC71C400250526 /* Logger.swift in Sources */,
 				DF02C23D25DC569300FB85B6 /* AppDelegate.swift in Sources */,
+				DF11D32B2604057300B3C78E /* GCDDataManager.swift in Sources */,
 				DFDA324A25EFA57200A80A73 /* ConversationTableViewCell.swift in Sources */,
 				DF3CB7D725F17ECF0062501B /* MessageTableViewCell.swift in Sources */,
 			);
