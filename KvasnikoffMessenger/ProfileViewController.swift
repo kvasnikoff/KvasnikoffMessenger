@@ -71,6 +71,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     private func setupUI() {
         
+        title = "My Profile"
+        
         let screenRect = UIScreen.main.bounds
         let screenWidth = screenRect.size.width
         
@@ -81,6 +83,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         view.addSubview(editButton)
         view.addSubview(initialsPhotoLabel)
         
+        let rightButton = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(rightBarButtonTapped))
+        self.navigationItem.rightBarButtonItem = rightButton
+     //   self.navigationItem.prefersLargeTitles = true // разобраться с несимметричной rightbarbutton
+       
         profilePhoto.frame = CGRect(x: 0, y: 0, width: screenWidth/2.3, height: screenWidth/2.3)
         profilePhoto.layer.cornerRadius = (profilePhoto.frame.size.width) / 2 // circle
         profilePhoto.clipsToBounds = true
@@ -124,8 +130,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(editButtonTapped))
         editButton.addGestureRecognizer(tapGestureRecognizer)
-
-        
+    }
+    
+    @objc private func rightBarButtonTapped () {
+        dismiss(animated: true, completion: nil)
     }
     
     @objc private func editButtonTapped() {
@@ -145,19 +153,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
 
         self.present(actionSheet, animated: true, completion: nil)
-        
-        
     }
     
-    private func camera()
-    {
+    private func camera() {
         let myPickerController = UIImagePickerController()
         myPickerController.delegate = self;
         
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             print("No camera found")
             return
-            
         }
         
         myPickerController.sourceType = .camera
@@ -165,15 +169,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     }
 
-    private func photoLibrary()
-    {
+    private func photoLibrary() {
 
         let myPickerController = UIImagePickerController()
         myPickerController.delegate = self;
         myPickerController.sourceType = .photoLibrary
 
         self.present(myPickerController, animated: true, completion: nil)
-
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -187,10 +189,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         initialsPhotoLabel.isHidden = true
         
         dismiss(animated: true)
-        
     }
-    
-        
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -224,7 +223,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
 
 }
-
 
 extension UIAlertController {
     func pruneNegativeWidthConstraints() {
