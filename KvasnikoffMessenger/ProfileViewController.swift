@@ -237,11 +237,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
         ])
         
+        let cancelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cancelActionFunc))
+        cancelButton.addGestureRecognizer(cancelTapGestureRecognizer)
+        
         let saveGCDTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(GCDButtonActionFunc))
         saveGCDButton.addGestureRecognizer(saveGCDTapGestureRecognizer)
         
         let OperationTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(OperationButtonActionFunc))
         saveOperationsButton.addGestureRecognizer(OperationTapGestureRecognizer)
+    }
+    
+    @objc func cancelActionFunc() {
+        removeSaveButtons()
     }
     
     @objc private func GCDButtonActionFunc() {
@@ -301,6 +308,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         
         self.present(actionSheet, animated: true, completion: nil)
+        setupSaveButtons()
     }
     
     @objc private func editButtonTapped() {
