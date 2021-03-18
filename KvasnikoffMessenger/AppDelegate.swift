@@ -60,6 +60,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         previousApplicationState = application.applicationState
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        printLog(log: "Application moved from \(parseState(state: previousApplicationState)) to \(parseState(state: application.applicationState)): \(#function)")
+        previousApplicationState = application.applicationState
+        
+        return true
+    }
 
 
 }

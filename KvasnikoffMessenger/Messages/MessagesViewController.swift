@@ -14,7 +14,14 @@ class MessagesViewController: UIViewController {
         var isIncoming: Bool
     }
     
-    var messagesArray: [MessageModel] = [MessageModel(text: "Привет!", isIncoming: true), MessageModel(text: "Йо, че как?", isIncoming: false), MessageModel(text: "Это тестовое супер длинное сообщение #1, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true), MessageModel(text: "Ок, понял", isIncoming: false), MessageModel(text: "Это тестовое супер длинное сообщение #2, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true), MessageModel(text: "Это тестовое супер длинное сообщение #3, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: false), MessageModel(text: "Это тестовое супер длинное сообщение #4, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true), MessageModel(text: "Это тестовое супер длинное сообщение #5, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: false)]
+    var messagesArray: [MessageModel] = [MessageModel(text: "Привет!", isIncoming: true),
+                                         MessageModel(text: "Йо, че как?", isIncoming: false),
+                                         MessageModel(text: "Это тестовое супер длинное сообщение #1, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true),
+                                         MessageModel(text: "Ок, понял", isIncoming: false),
+                                         MessageModel(text: "Это тестовое супер длинное сообщение #2, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true),
+                                         MessageModel(text: "Это тестовое супер длинное сообщение #3, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: false),
+                                         MessageModel(text: "Это тестовое супер длинное сообщение #4, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true),
+                                         MessageModel(text: "Это тестовое супер длинное сообщение #5, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: false)]
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .plain)
@@ -52,7 +59,7 @@ class MessagesViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     

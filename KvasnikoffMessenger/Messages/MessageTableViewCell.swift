@@ -39,6 +39,9 @@ class MessageTableViewCell: UITableViewCell {
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        
+        let screenWidthSize = UIScreen.main.bounds.size.width
+        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(bubbleView)
         addSubview(messageLabel)
@@ -46,7 +49,7 @@ class MessageTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 3/4 * self.frame.width - 24),
+            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3/4 - 16),
             
             bubbleView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -8),
             bubbleView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
