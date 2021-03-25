@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,10 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var previousApplicationState: UIApplication.State = .inactive
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         printLog(log: "Application moved from Not Running State to \(parseState(state: application.applicationState)): \(#function)")
         previousApplicationState = application.applicationState
+        FirebaseApp.configure()
         // Override point for customization after application launch.
         
         let window = UIWindow(frame: UIScreen.main.bounds)
@@ -61,12 +62,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         printLog(log: "Application moved from \(parseState(state: previousApplicationState)) to \(parseState(state: application.applicationState)): \(#function)")
         previousApplicationState = application.applicationState
         
         return true
     }
-
 
 }

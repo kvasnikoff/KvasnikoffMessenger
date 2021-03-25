@@ -7,7 +7,7 @@
 
 import UIKit
 
-//TODO:  сортировка массива по датам, вставить аватарки
+// TODO:  сортировка массива по датам, вставить аватарки
 
 protocol conversationCellConfiguration {
     var name: String? {get set}
@@ -52,7 +52,6 @@ class ConversationTableViewCell: UITableViewCell {
         return label
     }()
     
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -66,29 +65,27 @@ class ConversationTableViewCell: UITableViewCell {
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        nameLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal) //лейбл со временем всегда показывается полностью, лейбл с именем идет до лебла со временем, а потом троеточие
+        nameLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal) // лейбл со временем всегда показывается полностью, лейбл с именем идет до лебла со временем, а потом троеточие
         
             NSLayoutConstraint.activate([
             
             nameLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 12),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 12),
             
-            
             timeLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 12),
             timeLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -12),
             timeLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             timeLabel.bottomAnchor.constraint(equalTo: nameLabel.bottomAnchor),
             
-            
             messageLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 6),
             messageLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 12),
             messageLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -12),
-            messageLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -12),
+            messageLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -12)
         ])
         
-        let nameLabelFont = contentViewWidth/19
-        let timeLabelFontSize = contentViewWidth/20
-        let messageLabelFontSize = contentViewWidth/21
+        let nameLabelFont = contentViewWidth / 19
+        let timeLabelFontSize = contentViewWidth / 20
+        let messageLabelFontSize = contentViewWidth / 21
         
         nameLabel.font = .boldSystemFont(ofSize: nameLabelFont)
         timeLabel.font = .systemFont(ofSize: timeLabelFontSize)
@@ -129,27 +126,24 @@ class ConversationTableViewCell: UITableViewCell {
         
         if model.message == nil {
             messageLabel.text = "No messages yet"
-            messageLabel.font = UIFont(name: "AmericanTypewriter-CondensedLight", size: contentViewWidth/21)
+            messageLabel.font = UIFont(name: "AmericanTypewriter-CondensedLight", size: contentViewWidth / 21)
         } else {
             messageLabel.text = model.message
-            messageLabel.font = .systemFont(ofSize: contentViewWidth/21)
+            messageLabel.font = .systemFont(ofSize: contentViewWidth / 21)
         }
         
         if model.online == true {
-            contentView.superview?.backgroundColor = UIColor(red: 246/255.0, green: 246/255.0, blue: 173/255.0, alpha: 1)
+            contentView.superview?.backgroundColor = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 173 / 255.0, alpha: 1)
         } else {
             contentView.superview?.backgroundColor = .white
         }
         
         if model.hasUnreadMessages == true {
-            messageLabel.font = .boldSystemFont(ofSize: contentViewWidth/21)
+            messageLabel.font = .boldSystemFont(ofSize: contentViewWidth / 21)
             messageLabel.textColor = .black
         } else {
             messageLabel.textColor = .darkGray
         }
-        
-
-        
 
     }
 

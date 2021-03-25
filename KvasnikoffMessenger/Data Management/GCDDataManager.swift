@@ -5,7 +5,6 @@
 //  Created by Peter Kvasnikov on 19.03.2021.
 //
 
-
 import UIKit
 
 protocol DataManagerProtocol {
@@ -13,7 +12,7 @@ protocol DataManagerProtocol {
     func read()
 }
 
-class GCDDataManager: DataManagerProtocol  { //добавить нормальную инкапсуляцию для всего
+class GCDDataManager: DataManagerProtocol { // добавить нормальную инкапсуляцию для всего
     
     init(vc: ProfileViewController) {
         self.vc = vc
@@ -67,14 +66,12 @@ class GCDDataManager: DataManagerProtocol  { //добавить нормальн
                 }
             }
             
-            
         })
         
     }
     
     func read() {
         serialQueue.asyncAfter(deadline: .now(), execute: {
-            
             
             if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                 let nameURL = dir.appendingPathComponent(self.nameFile)
@@ -85,7 +82,6 @@ class GCDDataManager: DataManagerProtocol  { //добавить нормальн
                     let description = try String(contentsOf: descriptionURL, encoding: .utf8)
                     let imageData = try Data(contentsOf: imageURL)
                     let image = UIImage(data: imageData)
-                    
                     
                     DispatchQueue.main.async {
                         self.vc.nameTextField.text = name

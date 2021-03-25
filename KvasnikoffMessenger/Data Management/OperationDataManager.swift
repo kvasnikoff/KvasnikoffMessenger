@@ -41,7 +41,6 @@ class OperationDataManager: DataManagerProtocol {
         }
     }
     
-    
     func read() {
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let nameURL = dir.appendingPathComponent(self.nameFile)
@@ -116,7 +115,6 @@ class readOperation: Operation {
                   let descriptionURL = descriptionURL,
                   let imageURL = imageURL else { return }
             
-            
             let nameString = try String(contentsOf: nameURL, encoding: .utf8)
             let descriptionString = try String(contentsOf: descriptionURL, encoding: .utf8)
             let imageData = try Data(contentsOf: imageURL)
@@ -133,7 +131,7 @@ class readOperation: Operation {
                 self.vc.activityIndicator.removeFromSuperview()
             }
             
-        } catch  {
+        } catch {
             print("error write operation")
         }
         

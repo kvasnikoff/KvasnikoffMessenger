@@ -14,7 +14,7 @@ protocol MessageCellConfiguration {
 class MessageTableViewCell: UITableViewCell {
     
     struct MessageCellModel: MessageCellConfiguration {
-        var text: String //пустые сообщения отправлть нельзя, поэтому без nil
+        var text: String // пустые сообщения отправлть нельзя, поэтому без nil
         var isIncoming: Bool
     }
     
@@ -37,7 +37,6 @@ class MessageTableViewCell: UITableViewCell {
     private var leadingConstraint: NSLayoutConstraint?
     private var trailingConstraints: NSLayoutConstraint?
     
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
         let screenWidthSize = UIScreen.main.bounds.size.width
@@ -49,7 +48,7 @@ class MessageTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3/4 - 16),
+            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3 / 4 - 16),
             
             bubbleView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -8),
             bubbleView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
@@ -68,14 +67,14 @@ class MessageTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with model: MessageCellModel){
+    func configure(with model: MessageCellModel) {
         messageLabel.text = model.text
         
         if model.isIncoming {
-            bubbleView.backgroundColor = UIColor(red: 232/255.0, green: 232/255.0, blue: 234/255.0, alpha: 1.00)
+            bubbleView.backgroundColor = UIColor(red: 232 / 255.0, green: 232 / 255.0, blue: 234 / 255.0, alpha: 1.00)
             messageLabel.textColor = .black
         } else {
-            bubbleView.backgroundColor = UIColor(red: 22/255.0, green: 133/255.0, blue: 247/255.0, alpha: 1.00)
+            bubbleView.backgroundColor = UIColor(red: 22 / 255.0, green: 133 / 255.0, blue: 247 / 255.0, alpha: 1.00)
             messageLabel.textColor = .white
         }
         
@@ -87,6 +86,5 @@ class MessageTableViewCell: UITableViewCell {
           trailingConstraints?.isActive = true
         }
     }
-    
 
 }

@@ -85,7 +85,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc private func rightBarButtonTapped () {
-        let vc  = ProfileViewController()
+        let vc = ProfileViewController()
         let navVC = UINavigationController(rootViewController: vc)
         show(navVC, sender: nil)
     }
@@ -96,8 +96,7 @@ class ConversationsListViewController: UIViewController {
     
     private func onlineNow () {
         for conversation in conversationsArray {
-            if conversation.online == true { onlineNowArray.append(conversation) }
-            else if conversation.message != nil { notEmptAndNotOnlineConversationArray.append(conversation) }
+            if conversation.online == true { onlineNowArray.append(conversation) } else if conversation.message != nil { notEmptAndNotOnlineConversationArray.append(conversation) }
         }
     }
 
@@ -110,15 +109,13 @@ extension ConversationsListViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 { return "Online" }
-        else { return "History" } //section == 1
+        if section == 0 { return "Online" } else { return "History" } // section == 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return onlineNowArray.count
-        }
-        else { return notEmptAndNotOnlineConversationArray.count } //section == 1
+        } else { return notEmptAndNotOnlineConversationArray.count } // section == 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -159,6 +156,5 @@ extension ConversationsListViewController: UITableViewDelegate, UITableViewDataS
         tableView.deselectRow(at: indexPath, animated: true)
 
     }
-    
     
 }
