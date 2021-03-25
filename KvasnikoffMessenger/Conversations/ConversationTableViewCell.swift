@@ -65,7 +65,9 @@ class ConversationTableViewCell: UITableViewCell {
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        nameLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal) // лейбл со временем всегда показывается полностью, лейбл с именем идет до лебла со временем, а потом троеточие
+        // лейбл со временем всегда показывается полностью, лейбл с именем идет до лебла со временем, а потом троеточие
+        nameLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
+        
         
             NSLayoutConstraint.activate([
             

@@ -58,7 +58,7 @@ class OperationDataManager: DataManagerProtocol {
     
 }
 
-class writeOperation: Operation {
+class WriteOperation: Operation {
     
     var nameURL: URL?
     var descriptionURL: URL?
@@ -99,7 +99,7 @@ class writeOperation: Operation {
     }
 }
 
-class readOperation: Operation {
+class ReadOperation: Operation {
     var nameURL: URL?
     var descriptionURL: URL?
     var imageURL: URL?
