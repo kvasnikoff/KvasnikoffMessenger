@@ -110,10 +110,17 @@ class ConversationsListViewController: UIViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         let createAction = UIAlertAction(title: "Create", style: .default) { _ in
             if let textFields = alert.textFields, let channelNameTextField = textFields.first {
-                if let channelName = channelNameTextField.text, channelName.hasValue { // проверяем на пустую, TODO: добавить отключение кнопки и предупреждение
+                if let channelName = channelNameTextField.text, channelName.hasValue {
                     let db = Firestore.firestore()
                     let reference = db.collection("channels")
                     reference.addDocument(data: ["name": channelName])
+                } else {
+                    let incorrectAlert = UIAlertController(title: "Incorrect Channel Title", message: "Maybe you used only tabs and spaces.", preferredStyle: .alert)
+                    self.present(incorrectAlert, animated: true, completion: nil)
+                    let cancelAction = UIAlertAction(title: "Try again", style: .cancel) { _ in
+                        self.present(alert, animated: true)
+                    }
+                    incorrectAlert.addAction(cancelAction)
                 }
             }
         }
