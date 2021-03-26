@@ -7,15 +7,14 @@
 
 import UIKit
 
-protocol MessageCellConfiguration {
-    var text: String {get set} // в тз стоит Optional, но пустые сообщения же нельзя отправлять
-}
-
 class MessageTableViewCell: UITableViewCell {
     
-    struct MessageCellModel: MessageCellConfiguration {
-        var text: String // пустые сообщения отправлть нельзя, поэтому без nil
-        var isIncoming: Bool
+    struct MessageModel {
+        let content: String
+        let created: Date
+        let senderId: String
+        let senderName: String
+        
     }
     
     private let messageLabel: UILabel = {
@@ -67,10 +66,19 @@ class MessageTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with model: MessageCellModel) {
-        messageLabel.text = model.text
+    func configure(with model: MessageModel) {
         
-        if model.isIncoming {
+        var isComing = true
+        
+        let mySenderID = UIDevice.current.identifierForVendor?.uuidString
+        
+        if model.senderId == mySenderID {
+            isComing = false
+        }
+        
+        messageLabel.text = model.content
+        
+        if isComing {
             bubbleView.backgroundColor = UIColor(red: 232 / 255.0, green: 232 / 255.0, blue: 234 / 255.0, alpha: 1.00)
             messageLabel.textColor = .black
         } else {
@@ -78,7 +86,7 @@ class MessageTableViewCell: UITableViewCell {
             messageLabel.textColor = .white
         }
         
-        if model.isIncoming {
+        if isComing {
           leadingConstraint?.isActive = true
           trailingConstraints?.isActive = false
         } else {

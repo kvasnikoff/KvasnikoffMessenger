@@ -6,46 +6,82 @@
 //
 
 import UIKit
+import Firebase
 
 class MessagesViewController: UIViewController {
     
-    struct MessageModel: MessageCellConfiguration {
-        var text: String
-        var isIncoming: Bool
+    var channelID: String
+    
+    struct MessageModel {
+        let content: String
+        let created: Date
+        let senderId: String
+        let senderName: String
     }
     
-    var messagesArray: [MessageModel] = [MessageModel(text: "Привет!", isIncoming: true),
-                                         MessageModel(text: "Йо, че как?", isIncoming: false),
-                                         MessageModel(text: "Это тестовое супер длинное сообщение #1, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true),
-                                         MessageModel(text: "Ок, понял", isIncoming: false),
-                                         MessageModel(text: "Это тестовое супер длинное сообщение #2, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true),
-                                         MessageModel(text: "Это тестовое супер длинное сообщение #3, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: false),
-                                         MessageModel(text: "Это тестовое супер длинное сообщение #4, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: true),
-                                         MessageModel(text: "Это тестовое супер длинное сообщение #5, чтобы протестить длину сообщения, не лагает ли при длинном сообщении длина сообщения", isIncoming: false)]
-    
+    var messagesArray: [MessageModel] = []
     private let tableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .plain)
         return tableView
     }()
-    
+
     private let cellId = String(describing: MessageTableViewCell.self)
-    
-    init(chatTitle: String) {
+
+    init(chatTitle: String, channelID: String) {
+        self.channelID = channelID
         super.init(nibName: nil, bundle: nil)
         title = chatTitle
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.barTintColor = UIColor.white
+        setupFirebase()
         setupTableView()
 
     }
     
+    private func setupFirebase() {
+        let db = Firestore.firestore()
+        let reference = db.collection("channels")
+        
+        let messageRef = reference.document(channelID).collection("messages")
+        
+        messageRef.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                guard let messages = querySnapshot else { return }
+                
+                for message in messages.documents {
+                    let newMessage = MessageModel(content: message["content"] as? String ?? "none",
+                                                  created: self.convertTimeStampToDate(stamp: message["created"] as? Timestamp ?? Timestamp()),
+                                             senderId: message["senderId"] as? String ?? "none",
+                                             senderName: message["senderName"] as? String ?? "none")
+                    
+                    self.messagesArray.append(newMessage)
+                    
+                }
+                
+                DispatchQueue.main.async{
+                    self.tableView.reloadData()
+                    print(self.messagesArray)
+
+                    }
+            }
+            self.tableView.reloadData()
+            print(self.messagesArray)
+        }
+    }
+    
+    private func convertTimeStampToDate(stamp: Timestamp) -> Date {
+        return stamp.dateValue()
+    }
+
     private func setupTableView() {
         view.addSubview(tableView)
         tableView.delegate = self
@@ -62,11 +98,11 @@ class MessagesViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+
 }
 
 extension MessagesViewController: UITableViewDelegate, UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messagesArray.count
     }
@@ -74,14 +110,16 @@ extension MessagesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? MessageTableViewCell else { return UITableViewCell() }
-        
-        let message = messagesArray[indexPath.row].text
-        let isIncoming = messagesArray[indexPath.row].isIncoming
-        
-        cell.configure(with: .init(text: message, isIncoming: isIncoming))
-        
+
+        let message = messagesArray[indexPath.row].content
+        let date = messagesArray[indexPath.row].created
+        let senderID = messagesArray[indexPath.row].senderId
+        let senderName = messagesArray[indexPath.row].senderName
+
+        cell.configure(with: .init(content: message, created: date, senderId: senderID, senderName: senderName))
+
         return cell
-    
+
     }
-    
+
 }

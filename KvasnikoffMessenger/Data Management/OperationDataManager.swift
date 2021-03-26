@@ -29,7 +29,7 @@ class OperationDataManager: DataManagerProtocol {
             let descriptionURL = dir.appendingPathComponent(self.descriptionFile)
             let imageURL = dir.appendingPathComponent(self.imageFile)
             let operationQueue = OperationQueue()
-            let operation = writeOperation(vc: vc)
+            let operation = WriteOperation(vc: vc)
             operation.nameURL = nameURL
             operation.descriptionURL = descriptionURL
             operation.imageURL = imageURL
@@ -47,7 +47,7 @@ class OperationDataManager: DataManagerProtocol {
             let descriptionURL = dir.appendingPathComponent(self.descriptionFile)
             let imageURL = dir.appendingPathComponent(self.imageFile)
             let operationQueue = OperationQueue()
-            let operation = readOperation(vc: vc)
+            let operation = ReadOperation(vc: vc)
             operation.nameURL = nameURL
             operation.descriptionURL = descriptionURL
             operation.imageURL = imageURL

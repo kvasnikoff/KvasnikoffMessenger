@@ -10,21 +10,18 @@ import UIKit
 // TODO:  сортировка массива по датам, вставить аватарки
 
 protocol conversationCellConfiguration {
-    var name: String? {get set}
-    var message: String? {get set}
-    var date: Date? {get set}
-    var online: Bool {get set}
-    var hasUnreadMessages: Bool {get set}
+    var name: String {get set}
+    var lastMessage: String? {get set}
+    var lastActivity: Date? {get set}
+
 }
 
 class ConversationTableViewCell: UITableViewCell {
     
     struct ConversationCellModel: conversationCellConfiguration {
-        var name: String?
-        var message: String?
-        var date: Date?
-        var online: Bool
-        var hasUnreadMessages: Bool
+        var name: String
+        var lastMessage: String?
+        var lastActivity: Date?
     }
     
     private let nameLabel: UILabel = {
@@ -116,37 +113,22 @@ class ConversationTableViewCell: UITableViewCell {
     }
     
     func configure(with model: ConversationCellModel) {
-        nameLabel.text = model.name ?? "Unknown Name (Nil)"
+        let contentViewWidth = contentView.bounds.size.width
         
-        if let date = model.date {
+        nameLabel.text = model.name
+        
+        if model.lastMessage == "" {
+            messageLabel.text = "No messages yet"
+            messageLabel.font = UIFont(name: "AmericanTypewriter-CondensedLight", size: contentViewWidth / 21)
+        } else {
+            messageLabel.text = model.lastMessage
+            messageLabel.font = .systemFont(ofSize: contentViewWidth / 21)
+        }
+        
+        if let date = model.lastActivity {
             timeLabel.text = stringFromDate(date: date)
         } else { // везде прописал обратные else, а то без них reusable ячейки неправильно работают
             timeLabel.text = ""
         }
-    
-        let contentViewWidth = contentView.bounds.size.width
-        
-        if model.message == nil {
-            messageLabel.text = "No messages yet"
-            messageLabel.font = UIFont(name: "AmericanTypewriter-CondensedLight", size: contentViewWidth / 21)
-        } else {
-            messageLabel.text = model.message
-            messageLabel.font = .systemFont(ofSize: contentViewWidth / 21)
-        }
-        
-        if model.online == true {
-            contentView.superview?.backgroundColor = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 173 / 255.0, alpha: 1)
-        } else {
-            contentView.superview?.backgroundColor = .white
-        }
-        
-        if model.hasUnreadMessages == true {
-            messageLabel.font = .boldSystemFont(ofSize: contentViewWidth / 21)
-            messageLabel.textColor = .black
-        } else {
-            messageLabel.textColor = .darkGray
-        }
-
     }
-
 }
