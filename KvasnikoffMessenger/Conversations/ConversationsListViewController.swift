@@ -6,41 +6,16 @@
 //
 
 import UIKit
+import Firebase
 
 class ConversationsListViewController: UIViewController {
     
-    struct ConversationModel: conversationCellConfiguration {
-        var name: String?
-        var message: String?
-        var date: Date?
-        var online: Bool
-        var hasUnreadMessages: Bool
+    struct Channel {
+        let identifier: String
+        let name: String
+        let lastMessage: String?
+        let lastActivity: Date?
     }
-    private var conversationsArray: [ConversationModel] = [ConversationModel(name: "Oleg Tinkoff", message: "А давайте мы купим этот говнояндекс", date: Date(), online: true, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Оливер Хьюз", message: "Олег Тиньков – наш духовный отец, но банком руковожу я", date: Date(), online: true, hasUnreadMessages: true),
-                                                           ConversationModel(name: "Павел Дуров", message: "Только что попробовал iPhone 12 Pro — какой невероятно корявый кусок железа", date: Date(), online: true, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Аркадий Волож", message: nil, date: nil, online: true, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Очень длинный лейбл Очень Очень Очень", message: "И все же я не смещаю timeLabel :)", date: Date(), online: true, hasUnreadMessages: false),
-                                                           ConversationModel(name: nil, message: "Это очень длинное сообщение очень очень длинное очень очень длинное очень очень очень очень", date: Date(), online: true, hasUnreadMessages: true),
-                                                           ConversationModel(name: "Дата не сегодняшняя", message: "И это не страшно", date: Date(timeIntervalSinceNow: -172800.0), online: true, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Сундар Пичаи", message: nil, date: nil, online: true, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Без сообщения и сл-но даты", message: nil, date: nil, online: true, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Craig Federighi", message: "How cool is that?", date: Date(timeIntervalSinceNow: -182800.0), online: true, hasUnreadMessages: true),
-                                                           ConversationModel(name: nil, message: nil, date: nil, online: false, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Сегодняшнее", message: "Время", date: Date(), online: false, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Проверил", message: "С nil сообщением сюда не пропускают", date: Date(), online: false, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Дата", message: "Вчерашняя", date: Date(timeIntervalSinceNow: -86400), online: false, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true),
-                                                           ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true),
-                                                           ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true),
-                                                           ConversationModel(name: "Нет", message: "Непрочитанного сообщения", date: Date(), online: false, hasUnreadMessages: false),
-                                                           ConversationModel(name: "Есть", message: "Непрочитанное сообщение", date: Date(), online: false, hasUnreadMessages: true)]
-    
-    private var onlineNowArray: [ConversationModel] = []
-    
-    private var notEmptAndNotOnlineConversationArray: [ConversationModel] = []
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .plain)
@@ -48,13 +23,51 @@ class ConversationsListViewController: UIViewController {
     }()
     
     private let cellId = String(describing: ConversationTableViewCell.self)
+    
+    var channels = [Channel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        onlineNow()
+        setupFirebase()
         setupNavigationBar()
         setupTableView()
         setupUI()
+    }
+    
+    private func setupFirebase() {
+        let db = Firestore.firestore()
+        let reference = db.collection("channels")
+        
+        reference.addSnapshotListener { [weak self] snapshot, _ in
+            guard let documents = snapshot?.documents else {
+                print("No documents")
+                return
+            }
+ //           print(documents[0].data())
+            self?.channels = documents.map { (queryDocumentSnapshot) -> Channel in
+                let data = queryDocumentSnapshot.data()
+                
+                let identifier = queryDocumentSnapshot.documentID
+                let name = data["name"]  as? String ?? ""
+                let lastMessage = data["lastMessage"] as? String ?? ""
+                let activityTS = data["lastActivity"] as? Timestamp ?? nil
+
+                let activity = activityTS?.dateValue() ?? nil
+                
+                DispatchQueue.main.async {
+                    let sortedChannels = self?.channels.sorted(by: { ($0.lastActivity ?? .distantFuture) > ($1.lastActivity ?? .distantFuture) })
+                    if let sortedChannels = sortedChannels {
+                        self?.channels = sortedChannels
+                    }
+                    
+                    self?.tableView.reloadData()
+//                    print(self?.channels)
+                }
+                
+                return Channel(identifier: identifier, name: name, lastMessage: lastMessage, lastActivity: activity)
+
+            }
+        }
     }
     
     private func setupTableView() {
@@ -74,18 +87,52 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = "Tinkoff Chat"
+        title = "Channels"
         var rightButton = UIBarButtonItem()
         if #available(iOS 13.0, *) {
             rightButton = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle.fill"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         } else {
-            rightButton = UIBarButtonItem(title: "Профиль", style: .plain, target: self, action: #selector(rightBarButtonTapped))
+            rightButton = UIBarButtonItem(image: UIImage(named: "profileIcon")?.withRenderingMode(.alwaysOriginal),
+                                          style: .plain, target: self, action: #selector(rightBarButtonTapped))
         }
-        navigationItem.rightBarButtonItem = rightButton
+        let newChannelBurButton = UIBarButtonItem(image: UIImage(named: "newMessageIcon"), style: .plain, target: self, action: #selector(newChannelButtonCLicked))
+        navigationItem.rightBarButtonItems = [newChannelBurButton, rightButton]
+    }
+    
+    @objc func newChannelButtonCLicked() {
+        
+        let alertTitle = "Create Channel"
+        let alertMessage = "Enter a channel name below."
+        
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        alert.addTextField { textField in textField.placeholder = "Name" }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let createAction = UIAlertAction(title: "Create", style: .default) { _ in
+            if let textFields = alert.textFields, let channelNameTextField = textFields.first {
+                if let channelName = channelNameTextField.text, channelName.hasValue {
+                    let db = Firestore.firestore()
+                    let reference = db.collection("channels")
+                    reference.addDocument(data: ["name": channelName])
+                } else {
+                    let incorrectAlert = UIAlertController(title: "Incorrect Channel Title", message: "Maybe you used only tabs and spaces.", preferredStyle: .alert)
+                    self.present(incorrectAlert, animated: true, completion: nil)
+                    let cancelAction = UIAlertAction(title: "Try again", style: .cancel) { _ in
+                        self.present(alert, animated: true)
+                    }
+                    incorrectAlert.addAction(cancelAction)
+                }
+            }
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(createAction)
+        
+        present(alert, animated: true)
     }
     
     @objc private func rightBarButtonTapped () {
-        let vc  = ProfileViewController()
+        let vc = ProfileViewController()
         let navVC = UINavigationController(rootViewController: vc)
         show(navVC, sender: nil)
     }
@@ -94,51 +141,22 @@ class ConversationsListViewController: UIViewController {
         self.view.backgroundColor = .white
     }
     
-    private func onlineNow () {
-        for conversation in conversationsArray {
-            if conversation.online == true { onlineNowArray.append(conversation) }
-            else if conversation.message != nil { notEmptAndNotOnlineConversationArray.append(conversation) }
-        }
-    }
-
 }
 
 extension ConversationsListViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        2
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 { return "Online" }
-        else { return "History" } //section == 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return onlineNowArray.count
-        }
-        else { return notEmptAndNotOnlineConversationArray.count } //section == 1
+        return channels.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var array = [ConversationModel]()
-        
-        if indexPath.section == 0 {
-            array = onlineNowArray
-        } else {
-            array = notEmptAndNotOnlineConversationArray
-        }
-        
-        let name = array[indexPath.row].name
-        let message = array[indexPath.row].message
-        let date = array[indexPath.row].date
-        let online = array[indexPath.row].online
-        let hasUnreadMessages = array[indexPath.row].hasUnreadMessages
+        let name = channels[indexPath.row].name
+        let lastMessage = channels[indexPath.row].lastMessage
+        let lastActivity = channels[indexPath.row].lastActivity
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? ConversationTableViewCell else { return UITableViewCell() }
         
-        cell.configure(with: .init(name: name, message: message, date: date, online: online, hasUnreadMessages: hasUnreadMessages))
+        cell.configure(with: .init(name: name, lastMessage: lastMessage, lastActivity: lastActivity))
         
         tableView.rowHeight = cell.contentView.bounds.size.width / 3.5
         
@@ -146,19 +164,25 @@ extension ConversationsListViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var array = [ConversationModel]()
-        
-        if indexPath.section == 0 {
-            array = onlineNowArray
-        } else {
-            array = notEmptAndNotOnlineConversationArray
-        }
-        
-        let name = array[indexPath.row].name ?? "Unknown Name (Nil)"
-        navigationController?.pushViewController(MessagesViewController(chatTitle: name), animated: true)
+        let name = channels[indexPath.row].name
+        let channelID = channels[indexPath.row].identifier
+            navigationController?.pushViewController(MessagesViewController(chatTitle: name, channelID: channelID), animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
 
     }
     
-    
+}
+
+extension String {
+
+    var hasValue: Bool {
+        let trimmedString = self.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if trimmedString.isEmpty {
+            return false
+        } else {
+            return true
+        }
+    }
+
 }

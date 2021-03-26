@@ -7,16 +7,24 @@
 
 import UIKit
 
-protocol MessageCellConfiguration {
-    var text: String {get set} // в тз стоит Optional, но пустые сообщения же нельзя отправлять
-}
-
 class MessageTableViewCell: UITableViewCell {
     
-    struct MessageCellModel: MessageCellConfiguration {
-        var text: String //пустые сообщения отправлть нельзя, поэтому без nil
-        var isIncoming: Bool
+    struct MessageModel {
+        let content: String
+        let created: Date
+        let senderId: String
+        let senderName: String
+        
     }
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = .white
+        label.text = ""
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     private let messageLabel: UILabel = {
         let label = UILabel()
@@ -37,7 +45,6 @@ class MessageTableViewCell: UITableViewCell {
     private var leadingConstraint: NSLayoutConstraint?
     private var trailingConstraints: NSLayoutConstraint?
     
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
         let screenWidthSize = UIScreen.main.bounds.size.width
@@ -45,11 +52,17 @@ class MessageTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(bubbleView)
         addSubview(messageLabel)
+        addSubview(nameLabel)
         
         NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            nameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3 / 4 - 16),
+            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            
+            messageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 16),
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3/4 - 16),
+            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3 / 4 - 16),
             
             bubbleView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -8),
             bubbleView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
@@ -68,18 +81,35 @@ class MessageTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with model: MessageCellModel){
-        messageLabel.text = model.text
+    func configure(with model: MessageModel) {
         
-        if model.isIncoming {
-            bubbleView.backgroundColor = UIColor(red: 232/255.0, green: 232/255.0, blue: 234/255.0, alpha: 1.00)
-            messageLabel.textColor = .black
+        var isComing = true
+        
+        let mySenderID = UIDevice.current.identifierForVendor?.uuidString
+        
+        if model.senderId == mySenderID {
+            isComing = false
+        }
+
+        messageLabel.text = model.content
+        
+        if isComing {
+            nameLabel.text = model.senderName
         } else {
-            bubbleView.backgroundColor = UIColor(red: 22/255.0, green: 133/255.0, blue: 247/255.0, alpha: 1.00)
-            messageLabel.textColor = .white
+            nameLabel.text = ""
         }
         
-        if model.isIncoming {
+        if isComing {
+            bubbleView.backgroundColor = UIColor(red: 232 / 255.0, green: 232 / 255.0, blue: 234 / 255.0, alpha: 1.00)
+            messageLabel.textColor = .black
+            nameLabel.textColor = .black
+        } else {
+            bubbleView.backgroundColor = UIColor(red: 22 / 255.0, green: 133 / 255.0, blue: 247 / 255.0, alpha: 1.00)
+            messageLabel.textColor = .white
+            nameLabel.textColor = .white
+        }
+        
+        if isComing {
           leadingConstraint?.isActive = true
           trailingConstraints?.isActive = false
         } else {
@@ -87,6 +117,5 @@ class MessageTableViewCell: UITableViewCell {
           trailingConstraints?.isActive = true
         }
     }
-    
 
 }

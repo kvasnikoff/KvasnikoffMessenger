@@ -22,4 +22,3 @@ func parseState(state: UIApplication.State) -> String {
         return ("Unknown State")
     }
 }
-

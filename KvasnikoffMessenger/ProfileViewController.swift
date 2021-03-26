@@ -12,7 +12,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     let profilePhoto: UIImageView = {
         let image = UIImage()
         let imageView = UIImageView(image: image)
-        imageView.backgroundColor = UIColor(red: 228/255.0, green: 230/255.0, blue: 66/255.0, alpha: 1)
+        imageView.backgroundColor = UIColor(red: 228 / 255.0, green: 230 / 255.0, blue: 66 / 255.0, alpha: 1)
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -39,9 +39,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     //        return label
     //    }()
     
-    private let editButton : UIButton = {
+    private let editButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        button.backgroundColor = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 246 / 255.0, alpha: 1)
         button.setTitle("Edit", for: .normal)
         button.setTitleColor(.darkGray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
@@ -49,9 +49,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         return button
     }()
     
-    private let cancelButton : UIButton = {
+    private let cancelButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        button.backgroundColor = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 246 / 255.0, alpha: 1)
         button.setTitle("Cencel", for: .normal)
         button.setTitleColor(.darkGray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
@@ -59,9 +59,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         return button
     }()
     
-    private let saveGCDButton : UIButton = {
+    private let saveGCDButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        button.backgroundColor = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 246 / 255.0, alpha: 1)
         button.setTitle("Save GCD", for: .normal)
         button.setTitleColor(.darkGray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
@@ -69,9 +69,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         return button
     }()
     
-    private let saveOperationsButton : UIButton = {
+    private let saveOperationsButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        button.backgroundColor = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 246 / 255.0, alpha: 1)
         button.setTitle("Save Operations", for: .normal)
         button.setTitleColor(.darkGray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
@@ -114,22 +114,21 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var image = UIImage()
     
     init() {
-        print("Init before super.init: \(editButton.frame)") //nil нету, все ок
+        print("Init before super.init: \(editButton.frame)") // nil нету, все ок
         super.init(nibName: nil, bundle: nil)
-        print("Init after super.init: \(editButton.frame)") //nil нету, все ок
+        print("Init after super.init: \(editButton.frame)") // nil нету, все ок
         
     }
     
     required init?(coder: NSCoder) {
-        print("Required Init: \(editButton.frame)") //не вызывается
+        print("Required Init: \(editButton.frame)") // не вызывается
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         printLog(log: "\(#function)")
-        print("viewDidLoad before SetupUI: \(editButton.frame)") //размеры не рассчитались
+        print("viewDidLoad before SetupUI: \(editButton.frame)") // размеры не рассчитались
         setupUI()
     }
     
@@ -150,7 +149,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.navigationItem.rightBarButtonItem = rightButton
         //   self.navigationItem.prefersLargeTitles = true // разобраться с несимметричной rightbarbutton
         
-        profilePhoto.frame = CGRect(x: 0, y: 0, width: screenWidth/2.3, height: screenWidth/2.3)
+        profilePhoto.frame = CGRect(x: 0, y: 0, width: screenWidth / 2.3, height: screenWidth / 2.3)
         profilePhoto.layer.cornerRadius = (profilePhoto.frame.size.width) / 2 // circle
         profilePhoto.clipsToBounds = true
         
@@ -158,34 +157,30 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         //   descriptionLabel.font = .systemFont(ofSize: screenWidth/20)
         
-        initialsPhotoLabel.font = UIFont.boldSystemFont(ofSize: screenWidth/5)
+        initialsPhotoLabel.font = UIFont.boldSystemFont(ofSize: screenWidth / 5)
         
         profilePhoto.translatesAutoresizingMaskIntoConstraints = false
         initialsPhotoLabel.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         descriptionTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        
         NSLayoutConstraint.activate([
             
             profilePhoto.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             profilePhoto.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            profilePhoto.widthAnchor.constraint(equalToConstant: screenWidth/2.3),
-            profilePhoto.heightAnchor.constraint(equalToConstant: screenWidth/2.3),
+            profilePhoto.widthAnchor.constraint(equalToConstant: screenWidth / 2.3),
+            profilePhoto.heightAnchor.constraint(equalToConstant: screenWidth / 2.3),
             
             nameTextField.topAnchor.constraint(equalTo: profilePhoto.bottomAnchor, constant: 20),
             nameTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            nameTextField.widthAnchor.constraint(equalToConstant: screenWidth/1.2),
+            nameTextField.widthAnchor.constraint(equalToConstant: screenWidth / 1.2),
             
             descriptionTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20),
             descriptionTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            descriptionTextField.widthAnchor.constraint(equalToConstant: screenWidth/1.2),
+            descriptionTextField.widthAnchor.constraint(equalToConstant: screenWidth / 1.2),
             
             initialsPhotoLabel.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor),
-            initialsPhotoLabel.centerXAnchor.constraint(equalTo: profilePhoto.centerXAnchor),
-            
-            
+            initialsPhotoLabel.centerXAnchor.constraint(equalTo: profilePhoto.centerXAnchor)
             
         ])
         
@@ -206,7 +201,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         editButton.translatesAutoresizingMaskIntoConstraints = false
         editButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
         editButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        editButton.widthAnchor.constraint(equalToConstant: screenWidth/1.5).isActive = true
+        editButton.widthAnchor.constraint(equalToConstant: screenWidth / 1.5).isActive = true
         let editButtonTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(editButtonTapped))
         editButton.addGestureRecognizer(editButtonTapGestureRecognizer)
     }
@@ -226,7 +221,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         stackView.setCustomSpacing(10, after: cancelButton)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
         
         view.addSubview(stackView)
         
@@ -294,18 +288,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @objc private func profilePhotoTapped() {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
-        actionSheet.addAction(UIAlertAction(title: "Take Photo", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) -> Void in
+        actionSheet.addAction(UIAlertAction(title: "Take Photo", style: UIAlertAction.Style.default, handler: { (_: UIAlertAction!) -> Void in
             self.camera()
         }))
         
-        actionSheet.addAction(UIAlertAction(title: "Choose from Library", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) -> Void in
+        actionSheet.addAction(UIAlertAction(title: "Choose from Library", style: UIAlertAction.Style.default, handler: { (_: UIAlertAction!) -> Void in
             self.photoLibrary()
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
         
         actionSheet.pruneNegativeWidthConstraints() // устраняем ошибку Apple с констрейнтой в AlertViewController
-        
         
         self.present(actionSheet, animated: true, completion: nil)
         setupSaveButtons()
@@ -324,7 +317,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     func setupActivityIndicator() {
         let screenWidthSize = UIScreen.main.bounds.size.width
         view.addSubview(activityIndicator)
-        activityIndicator.centerXAnchor.constraint(equalTo: view.leadingAnchor, constant: screenWidthSize/2).isActive = true
+        activityIndicator.centerXAnchor.constraint(equalTo: view.leadingAnchor, constant: screenWidthSize / 2).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         activityIndicator.startAnimating()
     }
@@ -345,7 +338,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     private func camera() {
         let myPickerController = UIImagePickerController()
-        myPickerController.delegate = self;
+        myPickerController.delegate = self
         
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             print("No camera found")
@@ -360,13 +353,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     private func photoLibrary() {
         
         let myPickerController = UIImagePickerController()
-        myPickerController.delegate = self;
+        myPickerController.delegate = self
         myPickerController.sourceType = .photoLibrary
         
         self.present(myPickerController, animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         
         guard let selectedImage = info[.originalImage] as? UIImage else {
             print("No image found")
@@ -409,7 +402,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         super.viewDidDisappear(animated)
         printLog(log: "\(#function)")
     }
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         descriptionTextField.resignFirstResponder()
