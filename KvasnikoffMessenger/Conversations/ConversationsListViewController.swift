@@ -8,8 +8,6 @@
 import UIKit
 import Firebase
 
-
-
 class ConversationsListViewController: UIViewController {
     
     struct Channel {
@@ -37,10 +35,10 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setupFirebase() {
-        var db = Firestore.firestore()
-        var reference = db.collection("channels")
+        let db = Firestore.firestore()
+        let reference = db.collection("channels")
         
-        reference.addSnapshotListener { [weak self] snapshot, error in
+        reference.addSnapshotListener { [weak self] snapshot, _ in
             guard let documents = snapshot?.documents else {
                 print("No documents")
                 return
@@ -53,12 +51,11 @@ class ConversationsListViewController: UIViewController {
                 let name = data["name"]  as? String ?? ""
                 let lastMessage = data["lastMessage"] as? String ?? ""
                 let activityTS = data["lastActivity"] as? Timestamp ?? nil
-                
 
                 let activity = activityTS?.dateValue() ?? nil
                 
-                DispatchQueue.main.async{
-                    var sortedChannels  = self?.channels.sorted(by: { ($0.lastActivity ?? .distantFuture) > ($1.lastActivity ?? .distantFuture) })
+                DispatchQueue.main.async {
+                    let sortedChannels = self?.channels.sorted(by: { ($0.lastActivity ?? .distantFuture) > ($1.lastActivity ?? .distantFuture) })
                     if let sortedChannels = sortedChannels {
                         self?.channels = sortedChannels
                     }
@@ -66,10 +63,8 @@ class ConversationsListViewController: UIViewController {
                     self?.tableView.reloadData()
 //                    print(self?.channels)
                 }
-
                 
                 return Channel(identifier: identifier, name: name, lastMessage: lastMessage, lastActivity: activity)
-                
 
             }
         }
@@ -97,7 +92,8 @@ class ConversationsListViewController: UIViewController {
         if #available(iOS 13.0, *) {
             rightButton = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle.fill"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         } else {
-            rightButton = UIBarButtonItem(image: UIImage(named: "profileIcon")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(rightBarButtonTapped))
+            rightButton = UIBarButtonItem(image: UIImage(named: "profileIcon")?.withRenderingMode(.alwaysOriginal),
+                                          style: .plain, target: self, action: #selector(rightBarButtonTapped))
         }
         let newChannelBurButton = UIBarButtonItem(image: UIImage(named: "newMessageIcon"), style: .plain, target: self, action: #selector(newChannelButtonCLicked))
         navigationItem.rightBarButtonItems = [newChannelBurButton, rightButton]
@@ -161,7 +157,7 @@ extension ConversationsListViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let name = channels[indexPath.row].name ?? "Unknown Name (Nil)"
+        let name = channels[indexPath.row].name
         let channelID = channels[indexPath.row].identifier
             navigationController?.pushViewController(MessagesViewController(chatTitle: name, channelID: channelID), animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
@@ -169,7 +165,6 @@ extension ConversationsListViewController: UITableViewDelegate, UITableViewDataS
     }
     
 }
-
 
 extension String {
 

@@ -65,7 +65,6 @@ class ConversationTableViewCell: UITableViewCell {
         // лейбл со временем всегда показывается полностью, лейбл с именем идет до лебла со временем, а потом троеточие
         nameLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
         
-        
             NSLayoutConstraint.activate([
             
             nameLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 12),
