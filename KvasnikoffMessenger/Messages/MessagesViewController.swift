@@ -69,12 +69,12 @@ class MessagesViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    print(self.messagesArray)
+              //      print(self.messagesArray)
 
                     }
             }
             self.tableView.reloadData()
-            print(self.messagesArray)
+      //      print(self.messagesArray)
         }
     }
     

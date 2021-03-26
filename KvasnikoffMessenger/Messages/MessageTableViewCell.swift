@@ -17,6 +17,15 @@ class MessageTableViewCell: UITableViewCell {
         
     }
     
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = .white
+        label.text = ""
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -43,9 +52,15 @@ class MessageTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(bubbleView)
         addSubview(messageLabel)
+        addSubview(nameLabel)
         
         NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            nameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3 / 4 - 16),
+            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            
+            messageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 16),
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
             messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: screenWidthSize * 3 / 4 - 16),
             
@@ -75,15 +90,23 @@ class MessageTableViewCell: UITableViewCell {
         if model.senderId == mySenderID {
             isComing = false
         }
-        
+
         messageLabel.text = model.content
+        
+        if isComing {
+            nameLabel.text = model.senderName
+        } else {
+            nameLabel.text = ""
+        }
         
         if isComing {
             bubbleView.backgroundColor = UIColor(red: 232 / 255.0, green: 232 / 255.0, blue: 234 / 255.0, alpha: 1.00)
             messageLabel.textColor = .black
+            nameLabel.textColor = .black
         } else {
             bubbleView.backgroundColor = UIColor(red: 22 / 255.0, green: 133 / 255.0, blue: 247 / 255.0, alpha: 1.00)
             messageLabel.textColor = .white
+            nameLabel.textColor = .white
         }
         
         if isComing {
